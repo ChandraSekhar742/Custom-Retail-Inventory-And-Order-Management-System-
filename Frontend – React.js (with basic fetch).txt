@@ -1,0 +1,41 @@
+import React, { useState, useEffect } from 'react';
+
+function App() {
+  const [inventory, setInventory] = useState([]);
+  const [itemName, setItemName] = useState('');
+
+  const fetchInventory = async () => {
+    const res = await fetch('http://localhost:5000/inventory');
+    const data = await res.json();
+    setInventory(data);
+  };
+
+  const addItem = async () => {
+    await fetch('http://localhost:5000/inventory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: itemName })
+    });
+    fetchInventory();
+    setItemName('');
+  };
+
+  useEffect(() => {
+    fetchInventory();
+  }, []);
+
+  return (
+    <div>
+      <h1>Retail Inventory</h1>
+      <input value={itemName} onChange={e => setItemName(e.target.value)} />
+      <button onClick={addItem}>Add Item</button>
+      <ul>
+        {inventory.map((item, i) => (
+          <li key={i}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export def

@@ -1,0 +1,30 @@
+pip install flask  
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+inventory = []
+orders = []
+
+@app.route('/inventory', methods=['POST'])
+def add_item():
+    data = request.json
+    inventory.append(data)
+    return jsonify({'message': 'Item added'}), 201
+
+@app.route('/inventory', methods=['GET'])
+def get_inventory():
+    return jsonify(inventory)
+
+@app.route('/orders', methods=['POST'])
+def create_order():
+    order = request.json
+    orders.append(order)
+    return jsonify({'message': 'Order placed'}), 201
+
+@app.route('/orders', methods=['GET'])
+def get_orders():
+    return jsonify(orders)
+
+if __name__ == '__main__':
+    app.run(debug=True)
